@@ -8,6 +8,8 @@ server.listen(8080,(err)=>{
         console.log("Error in setting up server");
 });
 
+
+server.use(express.static(__dirname));
 server.get('/index',(req,res)=>{
     res.sendFile(path.join(__dirname,'index.html'));
 })
