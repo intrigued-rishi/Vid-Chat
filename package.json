@@ -17,6 +17,15 @@
   },
   "homepage": "https://github.com/intrigued-rishi/Vid-Chat#readme",
   "dependencies": {
-    "express": "^4.18.1"
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "geoip-lite": "^1.4.5",
+    "ip-location": "^1.0.1",
+    "locate-user": "^1.0.2",
+    "mongodb": "^4.8.0",
+    "mongoose": "^6.4.5",
+    "node-dev": "^7.4.3",
+    "twilio": "^3.80.0",
+    "uuid": "^8.3.2"
   }
 }

@@ -1,31 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
-    <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-
-
-
-    <div id="menu">
-        <p>Your ID:</p>
-        <p id="uuid"></p>
-        <input type="text" placeholder="Peer id" />
-        <button onclick="callUser()">Connect</button>
-    </div>
-
-    <div id="live">
-        <video id="remote-video"></video>
-        <video id="local-video" muted="true"></video>
-        <button id="end-call" onclick="endCall()">End Call</button>
-    </div>
-
-
-    <script src="main.js"></script>
-</body>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Twilio Video Demo</title>
+    <!-- Twilio Video CDN -->
+    <script src="https://sdk.twilio.com/js/video/releases/2.15.2/twilio-video.min.js"></script>
+  </head>
+  <body>
+    <form id="room-name-form">
+      Enter a Room Name to join: <input name="room_name" id="room-name-input" />
+      <button type="submit">Join Room</button>
+    </form>
+    <div id="video-container"></div>
+    <script src="public/main.js"></script>
+  </body>
 </html>
