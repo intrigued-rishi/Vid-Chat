@@ -1,6 +1,9 @@
 const form = document.getElementById("room-name-form");
 const roomNameInput = document.getElementById("room-name-input");
 const container = document.getElementById("video-container");
+const btn=document.getElementById("mute");
+
+let localParticipant=null;
 
 const startRoom = async (event) => {
   // prevent a page reload when a user submits the form
@@ -25,14 +28,16 @@ const startRoom = async (event) => {
   //join the video room with the token
   const room = await joinVideoRoom(roomName, token);
   console.log(room);
-  handleConnectedParticipant(room.localParticipant);
-  room.participants.forEach(handleConnectedParticipant);
-  room.on("participantConnected", handleConnectedParticipant);
+  localParticipant=room.localParticipant;
+  handleConnectedParticipant(room.localParticipant,"red");
+  room.participants.forEach((participant)=>handleConnectedParticipant(participant,"yellow"));
+  room.on("participantConnected", (participant)=>handleConnectedParticipant(participant,"yellow"));
 
   //for disabling video
-  room.localParticipant.videoTracks.forEach(publication => {
-    publication.track.disable();
-  });
+  // room.localParticipant.videoTracks.forEach(publication => {
+  //     console.log(publication);
+  //     publication.track.disable();
+  // });
   
 
   // handle cleanup when a participant disconnects
@@ -41,16 +46,20 @@ const startRoom = async (event) => {
   window.addEventListener("beforeunload", () => room.disconnect());
 };
 
-const handleConnectedParticipant = (participant) => {
+const handleConnectedParticipant = (participant,color) => {
         // create a div for this participant's tracks
         const participantDiv = document.createElement("div");
+        participantDiv.style.height=50;
+        participantDiv.style.width=50;
+        participantDiv.style.margin="1rem";
+        participantDiv.style.backgroundColor=color;
         participantDiv.setAttribute("id", participant.identity);
         container.appendChild(participantDiv);
     
         // iterate through the participant's published tracks and
         // call `handleTrackPublication` on them
         participant.tracks.forEach((trackPublication) => {
-            handleTrackPublication(trackPublication, participant);
+              handleTrackPublication(trackPublication, participant);
         });
     
         // listen for any new track publications
@@ -68,7 +77,7 @@ const handleConnectedParticipant = (participant) => {
     
         // check if the trackPublication contains a `track` attribute. If it does,
         // we are subscribed to this track. If not, we are not subscribed.
-        console.log("***********",trackPublication,participant);
+        //console.log(trackPublication);
         if (trackPublication.track) {
             displayTrack(trackPublication.track);
         }
@@ -87,15 +96,24 @@ const handleConnectedParticipant = (participant) => {
 
 const joinVideoRoom = async (roomName, token) => {
     // join the video room with the Access Token and the given room name
-    try {
+    try{
         const room = await Twilio.Video.connect(token, {
             room: roomName,
         });
         return room;
-    } catch (error) {
+    }catch(error) {
             console.log(error);
     }
 
 };
 
+
+btn.addEventListener("click",()=>{
+  localParticipant.videoTracks.forEach(publication => {
+      if(publication.isTrackEnabled)
+        publication.track.disable();
+      else
+        publication.track.enable();
+  });
+})
 form.addEventListener("submit", startRoom);
